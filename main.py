@@ -6,10 +6,12 @@ import streamlit as sl
 
 background_image = """
 <style>
-[data-testid="stAppViewContainer"] {background-color: #ffffff;
+[data-testid="stAppViewContainer"] {background-color: #fcfaf6;
 opacity: 1;
-background: linear-gradient(135deg, #fffbfc55 25%, transparent 25%) -17px 0/ 34px 34px, linear-gradient(225deg, #fffbfc 25%, transparent 25%) -17px 0/ 34px 34px, linear-gradient(315deg, #fffbfc55 25%, transparent 25%) 0px 0/ 34px 34px, linear-gradient(45deg, #fffbfc 25%, #ffffff 25%) 0px 0/ 34px 34px;
-}
+background: linear-gradient(135deg, #fffbfc55 25%, transparent 25%) 
+-17px 0/ 34px 34px, linear-gradient(225deg, #fffbfc 25%, transparent 25%)
+ -17px 0/ 34px 34px, linear-gradient(315deg, #fffbfc55 25%, transparent 25%) 
+ 0px 0/ 34px 34px, linear-gradient(45deg, #fffbfc 25%, #fcfaf6 25%) 0px 0/ 34px 34px;}
 </style>
 """
 sl.markdown(

@@ -1,5 +1,6 @@
 opencv-python
 streamlit
+openai
 datetime
 numpy
 auth0-python

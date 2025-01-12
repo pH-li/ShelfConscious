@@ -6,31 +6,26 @@ from PIL import Image
 from openai import OpenAI
 import os
 
-def call_api(image_path, max_size=(2000, 2000)):
+def call_api(img, max_size=(2000, 2000)):
     api_url = 'https://api.api-ninjas.com/v1/objectdetection'
 
-    with open("images/" + image_path, 'rb') as image_file_descriptor:
-        img = Image.open(image_file_descriptor)
+    if img.size[0] > max_size[0] or img.size[1] > max_size[1]:
+        img.thumbnail(max_size, Image.LANCZOS)
 
-        if img.size[0] > max_size[0] or img.size[1] > max_size[1]:
-            img.thumbnail(max_size, Image.LANCZOS)
+    # Convert the image to bytes
+    buffer = io.BytesIO()
+    img.save(buffer, format='JPEG')
+    img_bytes = buffer.getvalue()
 
-            buffer = io.BytesIO()
-            img.save(buffer, format=img.format)
-            buffer.seek(0)
+    files = {'image': ('image.jpg', img_bytes, 'image/jpeg')}
 
-            files = {'image': ('image.jpg', buffer, 'image/jpeg')}
-        else:
-            image_file_descriptor.seek(0)
-            files = {'image': image_file_descriptor}
+    r = requests.post(api_url, headers={'X-Api-Key': 'cHp4ZabWUnYryfx7A5ErwQ==IjIskOoZyBoVQWpt'}, files=files)
+    r_string = str(r.json()).replace("'", '"')
 
-        r = requests.post(api_url, headers={'X-Api-Key': 'cHp4ZabWUnYryfx7A5ErwQ==IjIskOoZyBoVQWpt'}, files=files)
-        r_string = str(r.json()).replace("'", '"')
-
-        return json.loads(r_string)
+    return json.loads(r_string)
 
 def draw_bb(image_path, bounding_box):
-    image = cv2.imread("images/" + image_path)
+    image = cv2.imread(image_path)
 
     x1 = int(bounding_box['x1'])
     y1 = int(bounding_box['y1'])
@@ -101,15 +96,25 @@ def delete_files(directory):
                 print(f"Error deleting {file_path}: {e}")
 
 def main():
-    image_path = "orange.jpg"
+    image_path = "images/orange.jpg"
 
-    result = call_api(image_path)
+    try:
+        image_object = Image.open(image_path)
+        print("Image object created successfully.")
 
-    food, food_bb, expiry = ask_ai(result)
+        result = call_api(image_object)
 
-    print("Here is a: "+ food)
-    draw_bb(image_path, food_bb)
+        food, food_bb, expiry = ask_ai(result)
 
-    # delete_files("uploaded_images")
+        print("Here is a: " + food)
+        draw_bb(image_path, food_bb)
+
+        # delete_files("uploaded_images")
+    except FileNotFoundError:
+        print(f"Error: The file '{image_path}' was not found.")
+    except IOError:
+        print(f"Error: Unable to open the image file '{image_path}'.")
+
+
 
 main()

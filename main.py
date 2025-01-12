@@ -20,5 +20,4 @@ username = sl.text_input("Username")
 password = sl.text_input("Password")
 
 if sl.button("Login"):
-if sl.button("Go"):
     sl.switch_page("pages/1_displayoptions.py")

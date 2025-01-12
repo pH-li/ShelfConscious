@@ -3,5 +3,4 @@ streamlit
 openai
 datetime
 numpy
-auth0-python
-python-dotenv
+openai

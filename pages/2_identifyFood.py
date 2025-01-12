@@ -18,16 +18,20 @@ import csv
 from datetime import datetime, timedelta
 
 
-background_image = """
-<style>
-[data-testid="stAppViewContainer"] {background-color: #fcfaf6;
-opacity: 1;
-background: linear-gradient(135deg, #fffbfc55 25%, transparent 25%) 
--17px 0/ 34px 34px, linear-gradient(225deg, #fffbfc 25%, transparent 25%)
- -17px 0/ 34px 34px, linear-gradient(315deg, #fffbfc55 25%, transparent 25%) 
- 0px 0/ 34px 34px, linear-gradient(45deg, #fffbfc 25%, #fcfaf6 25%) 0px 0/ 34px 34px;}
-</style>
-"""
+def set_background_from_url(url):
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("{url}");
+            background-size: cover;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+image_url = "https://i.postimg.cc/FFy83g8R/Untitled-design-2.png"
+set_background_from_url(image_url)
 
 def delete_files(directory):
     for root, dirs, files in os.walk(directory):
@@ -112,10 +116,6 @@ def ask_ai(api_input):
     expiry = response[6]
 
     return current_food, current_bb, expiry
-
-
-st.markdown(
-    background_image, unsafe_allow_html=True)
 
 returnHome = st.button(label='Return to Home')
 
@@ -223,7 +223,7 @@ if st.session_state.upload_mode == 'upload':
 
 # Confirmation button
 if st.session_state.picture_taken:
-    confirmation = confirm_placeholder.button(label='Confirm Picture')
+    confirmation = confirm_placeholder.button(label='Confirm Picture', use_container_width=True)
     if confirmation:
         confirm_placeholder.empty()
         upload_placeholder.empty()

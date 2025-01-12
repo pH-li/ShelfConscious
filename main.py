@@ -1,17 +1,18 @@
 import streamlit as sl
-sl.set_page_config(initial_sidebar_state="collapsed")
-background_image = """
-<style>
-[data-testid="stAppViewContainer"] {background-color: #fcfaf6;
-opacity: 1;
-background: linear-gradient(135deg, #fffbfc55 25%, transparent 25%) 
--17px 0/ 34px 34px, linear-gradient(225deg, #fffbfc 25%, transparent 25%)
- -17px 0/ 34px 34px, linear-gradient(315deg, #fffbfc55 25%, transparent 25%) 
- 0px 0/ 34px 34px, linear-gradient(45deg, #fffbfc 25%, #fcfaf6 25%) 0px 0/ 34px 34px;}
-</style>
-"""
-sl.markdown(
-    background_image, unsafe_allow_html=True)
+def set_background_from_url(url):
+    sl.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("{url}");
+            background-size: cover;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+image_url = "https://i.postimg.cc/FFy83g8R/Untitled-design-2.png"
+set_background_from_url(image_url)
 
 sl.title('ShelfConscious')
 sl.write('Welcome to ShelfConscious! Please login below.')

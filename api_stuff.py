@@ -29,7 +29,7 @@ def call_api(image_path, max_size=(2000, 2000)):
 
         return json.loads(r_string)
 
-def draw_bb(image_path, bounding_box, food_name):
+def draw_bb(image_path, bounding_box):
     image = cv2.imread("images/" + image_path)
 
     x1 = int(bounding_box['x1'])
@@ -108,7 +108,7 @@ def main():
     food, food_bb, expiry = ask_ai(result)
 
     print("Here is a: "+ food)
-    draw_bb(image_path, food_bb, food)
+    draw_bb(image_path, food_bb)
 
     # delete_files("uploaded_images")
 

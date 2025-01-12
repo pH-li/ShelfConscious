@@ -4,7 +4,7 @@
 # FrontEnd
 # Log-in
 import streamlit as sl
-
+sl.set_page_config(initial_sidebar_state="collapsed")
 background_image = """
 <style>
 [data-testid="stAppViewContainer"] {background-color: #fcfaf6;
@@ -22,6 +22,7 @@ sl.markdown(
 sl.write("Log in")
 username = sl.text_input("Username")
 password = sl.text_input("Password")
+
 if sl.button("Go"):
     sl.switch_page("pages/1_displayoptions.py")
 #=======

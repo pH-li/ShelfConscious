@@ -3,7 +3,6 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
 
-
 def set_background_from_url(url):
     st.markdown(
         f"""
@@ -35,8 +34,7 @@ sorted_df['Expiry Date'] = sorted_df['Expiry Date'].dt.date
 sorted_df.to_csv('items.csv', index=False)
 
 # header for this page
-st.title("ShelfConscious")
-st.subheader("Item Tracker Homepage")
+st.title("Item Tracker")
 st.write("Current Date:", datetime.now().strftime('%Y-%m-%d'))
 
 # Get the current date as a datetime object (instead of a date object)
@@ -94,7 +92,8 @@ st.markdown(
     <style>
     .custom-box {
         background-color: #f8f9fa;  /* Light background color */
-        border: 2px solid #ff1100;  /* Burgundy border color */
+        border: 2px solid #ff1100
+        ;  /* Burgundy border color */
         border-radius: 10px;  /* Rounded corners */
         padding: 20px;  /* Padding inside the box */
         font-size: 25px;  /* Font size */
@@ -148,33 +147,20 @@ col1, col2 = st.columns(2)
 updated_df = df.copy()
 
 
-# Initialize session state for checkboxes if not already present
-if 'checkboxes' not in st.session_state:
-    st.session_state.checkboxes = {}
-
 # Display items in the first column and expiry dates in the second WITH CHECKBOXES try1
 # **BUG: must check box twice in order for it to be deleted :(
 with col1:
     st.subheader("Item")
     for index, row in sorted_df.iterrows():
-        # Use session state to store checkbox values
-        key = f"item_{index}"
-        if key not in st.session_state.checkboxes:
-            st.session_state.checkboxes[key] = False
-
-        # Create checkbox and update session state
-        checkbox = st.empty()
-        checkboxTemp = checkbox.checkbox(row['Item'], key=key)
-
-        if checkboxTemp:
+        checkbox = st.checkbox(row['Item'], key=f"item_{index}")
+        if checkbox:
             st.success("Item removed from list")
             st.balloons()
-            checkbox.empty()
             updated_df = updated_df.drop(index)
 
 with col2:
     st.subheader("Expiry Date")
-    for expiry_date in updated_df['Expiry Date'].dt.date:
+    for expiry_date in sorted_df['Expiry Date']:
         st.write(expiry_date)
 
 # Saves the Updated DataFrame to the CSV
@@ -184,7 +170,7 @@ if not updated_df.equals(sorted_df):
 # Add Item button
 col = st.columns(2)
 with col[0]:
-    add = st.button("Add Item", use_container_width=True)  # Full-width button that goes to lily's page!
+    add = st.button("Adgitd Item", use_container_width=True)  # Full-width button that goes to lily's page!
 with col[1]:
     recipe = st.button("Find Recipes", use_container_width=True)
 if add:

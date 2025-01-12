@@ -35,7 +35,8 @@ sorted_df['Expiry Date'] = sorted_df['Expiry Date'].dt.date
 sorted_df.to_csv('items.csv', index=False)
 
 # header for this page
-st.title("Item Tracker")
+st.title("ShelfConscious")
+st.subheader("Item Tracker Homepage")
 st.write("Current Date:", datetime.now().strftime('%Y-%m-%d'))
 
 # Get the current date as a datetime object (instead of a date object)
@@ -57,7 +58,7 @@ st.markdown(
     """
     <style>
     .burgundy-header {
-        color: #800020;
+        color: #ff1100;
         font-size: 36px;
         font-weight: bold;
         text-align: left;
@@ -76,7 +77,7 @@ st.markdown(
     """
     <style>
     .burgundy-header2 {
-        color: #800020;
+        color: #ff1100;
         font-size: 26px;
         font-weight: bold;
         text-align: left;
@@ -93,12 +94,12 @@ st.markdown(
     <style>
     .custom-box {
         background-color: #f8f9fa;  /* Light background color */
-        border: 2px solid #800020;  /* Burgundy border color */
+        border: 2px solid #ff1100;  /* Burgundy border color */
         border-radius: 10px;  /* Rounded corners */
         padding: 20px;  /* Padding inside the box */
         font-size: 25px;  /* Font size */
         font-weight: bold;  /* Font weight */
-        color: #800020;  /* Burgundy text color */
+        color: #ff1100;  /* Burgundy text color */
         margin-bottom: 20px;  /* Space below the box */
     }
     </style>
@@ -147,20 +148,33 @@ col1, col2 = st.columns(2)
 updated_df = df.copy()
 
 
+# Initialize session state for checkboxes if not already present
+if 'checkboxes' not in st.session_state:
+    st.session_state.checkboxes = {}
+
 # Display items in the first column and expiry dates in the second WITH CHECKBOXES try1
 # **BUG: must check box twice in order for it to be deleted :(
 with col1:
     st.subheader("Item")
     for index, row in sorted_df.iterrows():
-        checkbox = st.checkbox(row['Item'], key=f"item_{index}")
-        if checkbox:
+        # Use session state to store checkbox values
+        key = f"item_{index}"
+        if key not in st.session_state.checkboxes:
+            st.session_state.checkboxes[key] = False
+
+        # Create checkbox and update session state
+        checkbox = st.empty()
+        checkboxTemp = checkbox.checkbox(row['Item'], key=key)
+
+        if checkboxTemp:
             st.success("Item removed from list")
             st.balloons()
+            checkbox.empty()
             updated_df = updated_df.drop(index)
 
 with col2:
     st.subheader("Expiry Date")
-    for expiry_date in sorted_df['Expiry Date']:
+    for expiry_date in updated_df['Expiry Date'].dt.date:
         st.write(expiry_date)
 
 # Saves the Updated DataFrame to the CSV

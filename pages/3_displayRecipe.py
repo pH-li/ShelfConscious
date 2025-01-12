@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 from openai import OpenAI
+import pandas as pd
 
 
 def set_background_from_url(url):
@@ -71,14 +72,20 @@ def save_list_as_md(my_list, filename="recipes.md", directory= 'pages'):
     with open(file_path, "w") as f:
         f.write(md_content)
 
-# Example list of foods
-food_list = ["chicken", "garlic", "onion", "tomato"]
+# load in list of foods
+file_path = 'items.csv'
+
+# Load the CSV file
+df = pd.read_csv(file_path)
+
+food_list = df['Item'].tolist()
 
 # Get recipes from the AI
 recipes = ask_ai_for_recipes(food_list)
 save_list_as_md(recipes)
 
-st.write("Recipes")
+st.title("ShelfConscious")
+st.subheader("Recipes")
 st.markdown("<hr style='margin: 5px 0;'>", unsafe_allow_html=True)
 
 with open('pages/recipes.md', 'r') as file:
